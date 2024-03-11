@@ -1,0 +1,25 @@
+Word Embeddings:
+-Each word is a vector (fancy word for a list of numbers).
+-Words with similar meanings have similar vectors. So, "king" and "queen" would be close in this number space, while "king" and "banana" would be far apart.
+-The computer "learns" these relationships by analyzing tons of text data.
+
+Benefits of word embeddings:
+-Understanding context: By looking at nearby words, the computer can guess a word's meaning even if it's used in a new way.
+-Better predictions: Similar words have similar numbers, so the computer can make better predictions in tasks like machine translation or sentiment analysis.
+-Less data needed: Compared to traditional methods, word embeddings allow the computer to learn from smaller amounts of data.
+
+Different types of word embeddings exist, but the key idea is the same:
+Capture the meaning of words in a numerical way.
+Help computers understand the relationships between words.
+
+ALGORITHMS:
+One-Hot Encoding (OHE): Creates a sparse vector for each word, but doesn't capture relationships.
+BoW (Bag of Words): Creates a simple document vector where each entry reflects the word frequency in that document.
+TF-IDF: Assigns weights to words in the BoW vector based on their importance (TF-IDF score).
+Word2Vec: Analyzes word co-occurrence to create vectors where similar words have similar values. 
+          CBow: Predicts a word based on its surrounding context (multiple words predict one).
+          Skipgram: Predicts surrounding words based on a single input word (one word predicts multiple).
+GloVe: Utilizes statistical properties of the corpus for word embeddings.
+FastText: Breaks words into subwords for handling rare words.
+ELMo: Generates context-aware embeddings using LSTMs.
+
