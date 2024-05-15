@@ -1,0 +1,62 @@
+import requests
+from bs4 import BeautifulSoup
+from collections import Counter
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+def fetch_wikipedia_page(query):
+    # Fetch Wikipedia page for the given query by scraping
+    wikipedia_url = f"https://en.wikipedia.org/wiki/{query}"
+    
+    try:
+        # Send a GET request to the Wikipedia page
+        response = requests.get(wikipedia_url)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        
+        # Parse the HTML content of the page
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        # Extract the text content from the paragraphs
+        paragraphs = soup.find_all('p')
+        page_content = ' '.join([para.get_text() for para in paragraphs])
+        
+        return page_content
+    
+    except requests.exceptions.RequestException as e:
+        print("Error fetching Wikipedia page:", e)
+        return None
+
+def find_related_words(query, page_content, num_words=10):
+    # Tokenize the page content
+    words = word_tokenize(page_content.lower())
+    
+    # Remove NLTK stopwords
+    stop_words = set(stopwords.words('english'))
+    words = [word for word in words if word.isalnum() and word not in stop_words and len(word) > 1]
+    
+    # Count word occurrences
+    word_counts = Counter(words)
+    
+    # Filter out less important words
+    important_words = [word for word, count in word_counts.items() if count > 1 and len(word) > 2]
+    
+    # Get the most common important words
+    related_words = important_words[:num_words]
+    
+    return related_words
+
+# Example usage
+query = 'data structure'
+page_content = fetch_wikipedia_page(query.replace('_', ' '))
+
+if page_content:
+    print("Related words to", query.replace('_', ' '))
+    related_words = find_related_words(query.replace('_', ' '), page_content)
+    for word in related_words:
+        print(word)
+else:
+    print("Failed to fetch Wikipedia page for", query.replace('_', ' '))
